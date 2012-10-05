@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="moa/src/main/java"/>
+	<classpathentry kind="src" path="moa/src/examples/java"/>
 	<classpathentry kind="src" path="moa/src/test/java"/>
 	<classpathentry kind="lib" path="weka-package/lib/sizeofag-1.0.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
