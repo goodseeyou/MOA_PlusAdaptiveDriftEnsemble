@@ -103,7 +103,9 @@ public class SingleClassifierDrift extends AbstractClassifier {
         } else {
             prediction = false;
         }
-        this.ddmLevel = this.driftDetectionMethod.computeNextVal(prediction);
+        // change for new ddm
+        this.ddmLevel = this.driftDetectionMethod.computeNextVal(prediction,inst);
+        //this.ddmLevel = this.driftDetectionMethod.computeNextVal(prediction);
         switch (this.ddmLevel) {
             case DriftDetectionMethod.DDM_WARNING_LEVEL:
                 //System.out.println("1 0 W");

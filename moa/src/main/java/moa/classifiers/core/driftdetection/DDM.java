@@ -19,6 +19,7 @@
  */
 package moa.classifiers.core.driftdetection;
 
+import weka.core.Instance;
 import moa.core.ObjectRepository;
 import moa.options.AbstractOptionHandler;
 import moa.options.IntOption;
@@ -121,4 +122,10 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
     public DriftDetectionMethod copy() {
         return (DriftDetectionMethod) super.copy();
     }
+
+	@Override
+	public int computeNextVal(boolean prediction, Instance inst) {
+		// TODO Auto-generated method stub
+		return this.computeNextVal(prediction);
+	}
 }
