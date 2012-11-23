@@ -111,16 +111,16 @@ public class EDDM extends AbstractOptionHandler implements DriftDetectionMethod 
                 // System.out.print(p + " ");
                 if (m_n > FDDM_MINNUMINSTANCES && m_numErrors > m_minNumErrors
                         && p < FDDM_OUTCONTROL) {
-                    System.out.println(m_mean + ",D");
+                    //System.out.println(m_mean + ",D");
                     initialize();
                     return DDM_OUTCONTROL_LEVEL;
                 } else if (m_n > FDDM_MINNUMINSTANCES
                         && m_numErrors > m_minNumErrors && p < FDDM_WARNING) {
-                    System.out.println(m_mean + ",W");
+                    //System.out.println(m_mean + ",W");
                     m_lastLevel = DDM_WARNING_LEVEL;
                     return DDM_WARNING_LEVEL;
                 } else {
-                    System.out.println(m_mean + ",N");
+                    //System.out.println(m_mean + ",N");
                     m_lastLevel = DDM_INCONTROL_LEVEL;
                     return DDM_INCONTROL_LEVEL;
                 }
