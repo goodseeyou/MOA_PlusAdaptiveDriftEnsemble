@@ -22,6 +22,7 @@ package moa.classifiers.core.driftdetection;
 import weka.core.Instance;
 import moa.core.ObjectRepository;
 import moa.options.AbstractOptionHandler;
+import moa.options.FloatOption;
 import moa.options.IntOption;
 import moa.tasks.TaskMonitor;
 
@@ -43,7 +44,14 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
             'n',
             "The minimum number of instances before permitting detecting change.",
             30, 0, Integer.MAX_VALUE);
+    
+    public FloatOption alphaOption = new FloatOption(
+    		"alphaOption",
+    		'a',
+    		"the determination of drfit variable",
+    		1.0, 0.0, Double.MAX_VALUE);
 
+    
     private int m_n;
 
     private double m_p;
@@ -94,11 +102,11 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
 
 
 
-        if (m_n > minNumInstancesOption.getValue() && m_p + m_s > m_pmin + 3 * m_smin) {
+        if (m_n > minNumInstancesOption.getValue() && m_p + m_s > m_pmin + 3 * alphaOption.getValue() * m_smin) {
             //System.out.println(m_p + ",D");
             initialize();
             return DDM_OUTCONTROL_LEVEL;
-        } else if (m_p + m_s > m_pmin + 2 * m_smin) {
+        } else if (m_p + m_s > m_pmin + 2 * alphaOption.getValue() *m_smin) {
             //System.out.println(m_p + ",W");
             return DDM_WARNING_LEVEL;
         } else {

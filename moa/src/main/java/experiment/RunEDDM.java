@@ -2,7 +2,7 @@ package experiment;
 
 import moa.DoTask;
 
-public class OwnExperiment {
+public class RunEDDM {
 	public static void main(String args[]){
 		/*
 		 *  initialization 
