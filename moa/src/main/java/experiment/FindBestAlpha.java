@@ -1,15 +1,23 @@
 package experiment;
 
 import moa.DoTask;
+import java.text.NumberFormat;
 
 public class FindBestAlpha {
 	public static void main(String args[]){
-		for(double alpha=0.8;alpha<1.3;alpha+=0.1){
+		
+		for(double alpha=0.9;alpha<1.3;alpha+=0.1){
 			callRun(alpha,"_part_before");
 			callRun(alpha,"_part_after");
 		}
 	}
 	public static void callRun(double alphaOption,String part){
+		/*
+		 * formate
+		 */
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(4);
+		nf.setMinimumFractionDigits(4);
 		/*
 		 *  initialization 
 		 */
@@ -17,9 +25,9 @@ public class FindBestAlpha {
 				"trees.HoeffdingTree",
 				"trees.HoeffdingAdaptiveTree",
 				"bayes.NaiveBayes",
-				"(drift.SingleClassifierDrift -l trees.HoeffdingTree -d (DDM -a "+String.valueOf(alphaOption)+"))",
-				"(drift.SingleClassifierDrift -l trees.HoeffdingAdaptiveTree -d (DDM -a "+String.valueOf(alphaOption)+"))",
-				"(drift.SingleClassifierDrift -l bayes.NaiveBayes -d (DDM -a "+String.valueOf(alphaOption)+"))",
+				"(drift.SingleClassifierDrift -l trees.HoeffdingTree -d (DDM -a "+String.valueOf(Math.round(alphaOption*10)/10.0)+"))",
+				"(drift.SingleClassifierDrift -l trees.HoeffdingAdaptiveTree -d (DDM -a "+String.valueOf(Math.round(alphaOption*10)/10.0)+"))",
+				"(drift.SingleClassifierDrift -l bayes.NaiveBayes -d (DDM -a "+String.valueOf(Math.round(alphaOption*10)/10.0)+"))",
 				};
 		String[] dataPath = {
 				"(D:\\Dropbox\\Master work\\ver3 experiment\\FindAlpha\\data set\\ver3_day_open_high_low_volume_closeTag"+part+".arff)",
@@ -42,9 +50,9 @@ public class FindBestAlpha {
 				"Hoeffding Tree",
 				"Hoeffding Adaptive Tree",
 				"Naive Bayes",
-				part+" DDM Drift Hoeffding Tree"+String.valueOf(alphaOption),
-				part+" DDM Drift Hoeffding Adaptive Tree"+String.valueOf(alphaOption),
-				part+" DDM Drift Naive Bayes"+String.valueOf(alphaOption)
+				part+" DDM Drift Hoeffding Tree "+String.valueOf(Math.round(alphaOption*10)/10.0),
+				part+" DDM Drift Hoeffding Adaptive Tree "+String.valueOf(Math.round(alphaOption*10)/10.0),
+				part+" DDM Drift Naive Bayes "+String.valueOf(Math.round(alphaOption*10)/10.0)
 				};
 		String[] basePath={
 				"(D:\\Dropbox\\Master work\\ver3 experiment\\FindAlpha\\day\\",
