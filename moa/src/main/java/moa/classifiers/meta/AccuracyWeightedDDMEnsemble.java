@@ -19,6 +19,8 @@
  */
 package moa.classifiers.meta;
 
+import java.io.IOException;
+
 import moa.classifiers.core.driftdetection.DriftDetectionMethod;
 import moa.classifiers.AbstractClassifier;
 import moa.classifiers.Classifier;
@@ -27,7 +29,9 @@ import moa.core.DoubleVector;
 import moa.core.Measurement;
 import moa.core.ObjectRepository;
 import moa.options.ClassOption;
+import moa.options.FileOption;
 import moa.options.IntOption;
+import moa.options.StringOption;
 import moa.tasks.TaskMonitor;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -71,6 +75,13 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 	public IntOption maxByteSizeOption = new IntOption("maxByteSize", 'm', "Maximum memory consumed by ensemble.",
 			33554432, 0, Integer.MAX_VALUE);
 
+	/**
+	 * Get total data for graph
+	 */
+	public IntOption totalInstSizeOption = new IntOption("totalInstSizeOption",'t',"total number of instances",3000,1, Integer.MAX_VALUE);
+	
+	public StringOption weightFileOption = new StringOption("weightFile",'w',"File address for save weight of ensemble","temp.csv");
+	
 	/**
 	 * The weights of stored classifiers. 
 	 * weights[x][0] = weight
@@ -131,6 +142,15 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
     
     protected boolean newClassifierReset;
     
+    /**
+     * weight record 
+     */
+    protected WeightRecordContener weightRecordContener;
+    
+    /**
+     * total size of instances
+     */
+    int processedInstForWeight;
 	@Override
 	public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
 		this.newclassifier = (Classifier) getPreparedClassOption(this.learnerOption);
@@ -145,11 +165,15 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 		this.classDistributions = null;
 		this.processedInstances = 0;
 		this.learners = new Classifier[0];
+		this.processedInstForWeight=0;
 		
 		this.driftDetectionMethod = ((DriftDetectionMethod) getPreparedClassOption(this.driftDetectionMethodOption)).copy();
 		this.newclassifier =(Classifier) getPreparedClassOption(this.learnerOption);
 		this.newclassifier.resetLearning();
 		currentHoldIndex = this.addToStoredReturnIndex(this.newclassifier,(1.0/Double.MIN_VALUE));
+		
+		weightRecordContener = new WeightRecordContener(this.memberCountOption.getValue());
+		
 	}
 
 	@Override
@@ -163,9 +187,13 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 		// update weighted of ensemble
 		double mse_r = this.computeMseR();
 		double newclassifierClassifierWeight = 1.0 / (mse_r + Double.MIN_VALUE);
+		double forPassWeight[] = new double[this.learners.length];
 		for (int i = 0; i < this.learners.length; i++) {
 			this.weights[i][0] = 1.0 / (mse_r + this.computeMse(this.learners[(int) this.weights[i][1]], this.currentChunk) + Double.MIN_VALUE);
+			forPassWeight[i] = this.weights[i][0];
 		}	
+		if(this.learners.length>1)
+			weightRecordContener.setWeightByInst(forPassWeight);
 		// deal with DDM method
 		int trueClass = (int) inst.classValue();
 		boolean prediction;
@@ -200,6 +228,7 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 						
 					}
 				}
+				weightRecordContener.addNewID(currentHoldIndex,newclassifierClassifierWeight);
 				// reseting
 				this.processedInstances=0;
 				this.currentChunk=null;
@@ -221,7 +250,10 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 		/**
 		 * this.processChunk(); 
 		 */
-		
+		processedInstForWeight++;
+		if(processedInstForWeight>=this.totalInstSizeOption.getValue()){
+			weightRecordContener.write(weightFileOption.getValue());
+		}
 		
 	}
 

@@ -8,9 +8,9 @@ public class EnsembleExperiment {
 		 *  initialization 
 		 */
 		String[] algorithm = {
-				"(meta.AccuracyWeightedDDMEnsemble -l (trees.HoeffdingTree))",
-				"(meta.AccuracyWeightedDDMEnsemble -l (trees.HoeffdingAdaptiveTree))",
-				"(meta.AccuracyWeightedDDMEnsemble -l (bayes.NaiveBayes))"
+				"(meta.AccuracyWeightedDDMEnsemble -l (trees.HoeffdingTree)",
+				"(meta.AccuracyWeightedDDMEnsemble -l (trees.HoeffdingAdaptiveTree)",
+				"(meta.AccuracyWeightedDDMEnsemble -l (bayes.NaiveBayes)"
 				/*"(meta.AccuracyUpdatedEnsemble3 -l (trees.HoeffdingTree) -c 21)",
 				"(meta.AccuracyUpdatedEnsemble3 -l (trees.HoeffdingAdaptiveTree) -c 21)",
 				"(meta.AccuracyUpdatedEnsemble3 -l (bayes.NaiveBayes) -c 21)",*/
@@ -20,7 +20,7 @@ public class EnsembleExperiment {
 				"(D:\\Dropbox\\Master work\\ver3 experiment\\data set\\ver3_hour_open_high_low_volume_closeTag.arff)",
 				"(D:\\Dropbox\\Master work\\ver3 experiment\\data set\\ver3_minute_open_high_low_volume_closeTag.arff)"
 				};
-		String instanceLimit = "1000000";
+		String[] instanceLimit = {"3598","20269","993257"};
 		String[] splitNum = {"21","119","5851"};
 		String[] algorithmName = {
 				" AWDE Hoeffding Tree",
@@ -31,14 +31,17 @@ public class EnsembleExperiment {
 				"AUE Naive Bayes"*/
 				};
 		String[] basePath={
-				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\day\\AWDE ",
-				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\hour\\AWDE ",
-				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\minute\\AWDE "
+				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\day\\",
+				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\hour\\",
+				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\minute\\"
 				};
 		String[][] performancePath = new String[dataPath.length][algorithm.length];
+		String[][] weightPath = new String[dataPath.length][algorithm.length];
 		for(int i=0;i<basePath.length;i++)
-			for(int j=0;j<algorithmName.length;j++)
+			for(int j=0;j<algorithmName.length;j++){
 				performancePath[i][j]= basePath[i]+algorithmName[j]+".csv)";
+				weightPath[i][j] = basePath[i]+"Weight Record"+algorithmName[j]+".csv)";
+			}
 		String[][] predictPath = new String[dataPath.length][algorithm.length];
 		for(int i=0;i<basePath.length;i++)
 			for(int j=0;j<algorithmName.length;j++)
@@ -50,7 +53,7 @@ public class EnsembleExperiment {
 		 */
 		for(int i=0;i<dataPath.length;i++){
 			for(int j=0;j<algorithm.length;j++){
-				String[] task = {"EvaluatePrequential -l "+algorithm[j]+" -s (ArffFileStream -f "+dataPath[i]+") -i "+instanceLimit+" -f "+splitNum[i]+" -q "+splitNum[i]+" -d "+performancePath[i][j]+" -o "+predictPath[i][j]};
+				String[] task = {"EvaluatePrequential -l "+algorithm[j]+" -w "+weightPath[i][j]+" -t "+instanceLimit[i]+") -s (ArffFileStream -f "+dataPath[i]+") -i "+instanceLimit[i]+" -f "+splitNum[i]+" -q "+splitNum[i]}; //+" -d "+performancePath[i][j]+" -o "+predictPath[i][j]};
 				DoTask.main(task);
 			}
 		}	
