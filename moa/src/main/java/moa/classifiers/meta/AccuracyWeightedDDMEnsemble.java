@@ -19,9 +19,9 @@
  */
 package moa.classifiers.meta;
 
+import moa.classifiers.core.driftdetection.DriftDetectionMethod;
 import moa.classifiers.AbstractClassifier;
 import moa.classifiers.Classifier;
-import moa.classifiers.core.driftdetection.DriftDetectionMethod;
 import moa.classifiers.trees.HoeffdingTree;
 import moa.core.DoubleVector;
 import moa.core.Measurement;
@@ -38,7 +38,7 @@ import weka.core.Utils;
  * Brzezinski and Stefanowski in "Reacting to Different Types of Concept Drift:
  * The Accuracy Updated Ensemble Algorithm", IEEE Trans. Neural Netw, 2013.
  */
-public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
+public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 
 	private static final long serialVersionUID = 1L;
 
@@ -53,6 +53,11 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 	 */
 	public IntOption memberCountOption = new IntOption("memberCount", 'n',
 			"The maximum number of classifiers in an ensemble.", 10, 1, Integer.MAX_VALUE);
+	/**
+	 * DDM method Option
+	 */
+	public ClassOption driftDetectionMethodOption = new ClassOption("driftDetectionMethod", 'd',
+            "Drift detection method to use.", DriftDetectionMethod.class, "DDM");
 
 	/**
 	 * Chunk size.
@@ -66,12 +71,6 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 	public IntOption maxByteSizeOption = new IntOption("maxByteSize", 'm', "Maximum memory consumed by ensemble.",
 			33554432, 0, Integer.MAX_VALUE);
 
-	/**
-	 * 
-	 */
-	 public ClassOption driftDetectionMethodOption = new ClassOption("driftDetectionMethod", 'd',
-             "Drift detection method to use.", DriftDetectionMethod.class, "DDM");
-	
 	/**
 	 * The weights of stored classifiers. 
 	 * weights[x][0] = weight
@@ -97,78 +96,133 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 	/**
 	 * Candidate classifier.
 	 */
-	protected Classifier candidate;
+	//protected Classifier candidate;
+	/**
+	 * current hold classifier index
+	 */
+	protected int currentHoldIndex;
+	/**
+	 * stand by for ddm warning level
+	 */
+	protected Classifier newclassifier;
 	
 	/**
 	 * Current chunk of instances.
 	 */
 	protected Instances currentChunk;
 	
-	private int instances;
+	/**
+	 * DDM method
+	 */
+	protected DriftDetectionMethod driftDetectionMethod;
 	
-    protected int ddmLevel;
-    
-    protected DriftDetectionMethod driftDetectionMethod;
+	/**
+	 * DDM variable
+	 */
+	protected int ddmLevel;
 
+    public boolean isWarningDetected() {
+        return (this.ddmLevel == DriftDetectionMethod.DDM_WARNING_LEVEL);
+    }
+
+    public boolean isChangeDetected() {
+        return (this.ddmLevel == DriftDetectionMethod.DDM_OUTCONTROL_LEVEL);
+    }
+    
+    protected boolean newClassifierReset;
+    
 	@Override
 	public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
-		this.candidate = (Classifier) getPreparedClassOption(this.learnerOption);
-		this.candidate.resetLearning();
+		this.newclassifier = (Classifier) getPreparedClassOption(this.learnerOption);
+		this.newclassifier.resetLearning();
 
 		super.prepareForUseImpl(monitor, repository);
 	}
 
 	@Override
 	public void resetLearningImpl() {
-		this.instances =0;
 		this.currentChunk = null;
 		this.classDistributions = null;
 		this.processedInstances = 0;
 		this.learners = new Classifier[0];
-		this.driftDetectionMethod = ((DriftDetectionMethod) getPreparedClassOption(this.driftDetectionMethodOption)).copy();
-		this.candidate = (Classifier) getPreparedClassOption(this.learnerOption);
-		this.candidate.resetLearning();
 		
+		this.driftDetectionMethod = ((DriftDetectionMethod) getPreparedClassOption(this.driftDetectionMethodOption)).copy();
+		this.newclassifier =(Classifier) getPreparedClassOption(this.learnerOption);
+		this.newclassifier.resetLearning();
+		currentHoldIndex = this.addToStoredReturnIndex(this.newclassifier,(1.0/Double.MIN_VALUE));
 	}
 
 	@Override
 	public void trainOnInstanceImpl(Instance inst) {
 		this.initVariables();
+
 		this.classDistributions[(int) inst.classValue()]++;
 		this.currentChunk.add(inst);
 		this.processedInstances++;
-		this.instances++;
-		/*
-		 * how to decide ddm occur, by total vote or by current sub classifier?
-		 * */
+		
+		// update weighted of ensemble
+		double mse_r = this.computeMseR();
+		double newclassifierClassifierWeight = 1.0 / (mse_r + Double.MIN_VALUE);
+		for (int i = 0; i < this.learners.length; i++) {
+			this.weights[i][0] = 1.0 / (mse_r + this.computeMse(this.learners[(int) this.weights[i][1]], this.currentChunk) + Double.MIN_VALUE);
+		}	
+		// deal with DDM method
 		int trueClass = (int) inst.classValue();
-        boolean prediction;
-        
-        if (Utils.maxIndex(this.getVotesForInstance(inst)) == trueClass) {
-            prediction = true;
-        } else {
-            prediction = false;
-        }
-        if(trueClass!=0) // problem
-        	System.out.println(trueClass+" "+prediction+" "+Utils.maxIndex(this.getVotesForInstance(inst)));
-        this.ddmLevel = this.driftDetectionMethod.computeNextVal(prediction,inst);
-        switch(this.ddmLevel){
-        case  DriftDetectionMethod.DDM_OUTCONTROL_LEVEL:
-			this.processChunk();
-			this.instances=0;
-			System.out.println("DDM out control level");
-        	break;
-        case DriftDetectionMethod.DDM_WARNING_LEVEL:
-        	System.out.println("DDM warning level");
-        	break;
-        case DriftDetectionMethod.DDM_INCONTROL_LEVEL:
-        	//System.out.println("DDM incontrol level");
-        	break;
-        default:
-        	System.out.println("ERROR");
-        	break;
-        }
-        
+		boolean prediction;
+		if(Utils.maxIndex(this.learners[currentHoldIndex].getVotesForInstance(inst)) == trueClass){
+			prediction = true;
+		}else{
+			prediction = false;
+		}
+		this.ddmLevel = this.driftDetectionMethod.computeNextVal(prediction,inst);
+		switch(this.ddmLevel){
+			case DriftDetectionMethod.DDM_WARNING_LEVEL:
+				if (newClassifierReset == true) {
+                    this.newclassifier.resetLearning();
+                    newClassifierReset = false;
+                }
+                this.newclassifier.trainOnInstance(inst);
+                break;
+                
+			case DriftDetectionMethod.DDM_OUTCONTROL_LEVEL:
+				// add newclassifer into ensemble, and as currentHold
+				Classifier addedClassifier = null;
+				if(this.learners.length < this.memberCountOption.getValue()){
+					currentHoldIndex = this.addToStoredReturnIndex(this.newclassifier,newclassifierClassifierWeight);
+				}else{
+					int poorestClassifier = this.getPoorestClassifierIndex();
+					
+					if(this.weights[poorestClassifier][0] < newclassifierClassifierWeight){
+						this.weights[poorestClassifier][0] = newclassifierClassifierWeight;
+						addedClassifier = this.newclassifier.copy();
+						currentHoldIndex = (int) this.weights[poorestClassifier][1]; 
+						this.learners[currentHoldIndex] = addedClassifier;
+						
+					}
+				}
+				// reseting
+				this.processedInstances=0;
+				this.currentChunk=null;
+				this.classDistributions=null;
+				this.newclassifier = (Classifier) getPreparedClassOption(this.learnerOption);
+				this.newclassifier.resetLearning();
+				
+				//System.out.println("single classifier drift");
+				break;
+			case DriftDetectionMethod.DDM_INCONTROL_LEVEL:
+				newClassifierReset = true;
+				break;
+			default:
+					System.exit(0);
+		}
+		this.learners[currentHoldIndex].trainOnInstance(inst);
+
+		
+		/**
+		 * this.processChunk(); 
+		 */
+		
+		
 	}
 
 	/**
@@ -216,6 +270,7 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 	 * Processes a chunk of instances.
 	 * This method is called after collecting a chunk of examples.
 	 */
+	/*
 	protected void processChunk() {
 		Classifier addedClassifier = null;
 		double mse_r = this.computeMseR();
@@ -253,7 +308,7 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 
 		this.enforceMemoryLimit();
 	}
-
+*/
 	/**
 	 * Checks if the memory limit is exceeded and if so prunes the classifiers in the ensemble.
 	 */
@@ -277,7 +332,7 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 		double mse_r = 0;
 
 		for (int i = 0; i < this.classDistributions.length; i++) {
-			p_c = (double) this.classDistributions[i] / (double) this.instances;
+			p_c = (double) this.classDistributions[i] / (double) this.processedInstances;
 			mse_r += p_c * ((1 - p_c) * (1 - p_c));
 		}
 
@@ -315,7 +370,7 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 			}
 		}
 
-		mse_i /= this.instances;
+		mse_i /= this.processedInstances;
 
 		return mse_i;
 	}
@@ -369,7 +424,31 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 
 		return addedClassifier;
 	}
-	
+	/**
+	 * reutrn index edition of addToStored
+	 */
+	protected int addToStoredReturnIndex(Classifier newClassifier, double newClassifiersWeight) {
+		int index=-1;
+		Classifier[] newStored = new Classifier[this.learners.length + 1];
+		double[][] newStoredWeights = new double[newStored.length][2];
+
+		for (int i = 0; i < newStored.length; i++) {
+			if (i < this.learners.length) {
+				newStored[i] = this.learners[i];
+				newStoredWeights[i][0] = this.weights[i][0];
+				newStoredWeights[i][1] = this.weights[i][1];
+			} else {
+				newStored[i] = newClassifier.copy();
+				newStoredWeights[i][0] = newClassifiersWeight;
+				newStoredWeights[i][1] = i;
+				index = i;
+			}
+		}
+		this.learners = newStored;
+		this.weights = newStoredWeights;
+
+		return index;
+	}
 	/**
 	 * Finds the index of the classifier with the smallest weight.
 	 * @return
@@ -409,10 +488,5 @@ public class AccuracyUpdatedEnsemble3 extends AbstractClassifier {
 	 * @param classifierToTrain
 	 *            Classifier being trained.
 	 */
-	private void trainOnChunk(Classifier classifierToTrain) {
-		for (int num = 0; num < this.instances; num++) {
-			classifierToTrain.trainOnInstance(this.currentChunk.instance(num));
-		}
-	}
 
 }

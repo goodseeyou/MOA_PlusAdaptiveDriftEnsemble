@@ -8,9 +8,9 @@ public class EnsembleExperiment {
 		 *  initialization 
 		 */
 		String[] algorithm = {
-				"(meta.AccuracyUpdatedEnsemble3 -l (trees.HoeffdingTree))",
-				"(meta.AccuracyUpdatedEnsemble3 -l (trees.HoeffdingAdaptiveTree))",
-				"(meta.AccuracyUpdatedEnsemble3 -l (bayes.NaiveBayes))"
+				"(meta.AccuracyWeightedDDMEnsemble -l (trees.HoeffdingTree))",
+				"(meta.AccuracyWeightedDDMEnsemble -l (trees.HoeffdingAdaptiveTree))",
+				"(meta.AccuracyWeightedDDMEnsemble -l (bayes.NaiveBayes))"
 				/*"(meta.AccuracyUpdatedEnsemble3 -l (trees.HoeffdingTree) -c 21)",
 				"(meta.AccuracyUpdatedEnsemble3 -l (trees.HoeffdingAdaptiveTree) -c 21)",
 				"(meta.AccuracyUpdatedEnsemble3 -l (bayes.NaiveBayes) -c 21)",*/
@@ -23,17 +23,17 @@ public class EnsembleExperiment {
 		String instanceLimit = "1000000";
 		String[] splitNum = {"21","119","5851"};
 		String[] algorithmName = {
-				" AUE Hoeffding Tree",
-				" AUE Hoeffding Adaptive Tree",
-				" AUE Naive Bayes",
+				" AWDE Hoeffding Tree",
+				" AWDE Hoeffding Adaptive Tree",
+				" AWDE Naive Bayes",
 				/*"AUE Hoeffding Tree",
 				"AUE Hoeffding Adaptive Tree",
 				"AUE Naive Bayes"*/
 				};
 		String[] basePath={
-				"(D:\\Dropbox\\Master work\\Ensemble\\result\\day\\3DDM",
-				"(D:\\Dropbox\\Master work\\Ensemble\\result\\hour\\3DDM",
-				"(D:\\Dropbox\\Master work\\Ensemble\\result\\minute\\3DDM"
+				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\day\\AWDE ",
+				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\hour\\AWDE ",
+				"(D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\minute\\AWDE "
 				};
 		String[][] performancePath = new String[dataPath.length][algorithm.length];
 		for(int i=0;i<basePath.length;i++)
@@ -48,7 +48,7 @@ public class EnsembleExperiment {
 		/*
 		 *  run task 
 		 */
-		for(int i=1;i<2;i++){//i<dataPath.length;i++){
+		for(int i=0;i<dataPath.length;i++){
 			for(int j=0;j<algorithm.length;j++){
 				String[] task = {"EvaluatePrequential -l "+algorithm[j]+" -s (ArffFileStream -f "+dataPath[i]+") -i "+instanceLimit+" -f "+splitNum[i]+" -q "+splitNum[i]+" -d "+performancePath[i][j]+" -o "+predictPath[i][j]};
 				DoTask.main(task);

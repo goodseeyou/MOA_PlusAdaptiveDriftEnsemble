@@ -31,9 +31,9 @@ public class RunEDDM {
 				"EDDM Drift Naive Bayes"
 				};
 		String[] basePath={
-				"(D:\\Dropbox\\Master work\\ver3 experiment\\result\\day\\",
-				"(D:\\Dropbox\\Master work\\ver3 experiment\\result\\hour\\",
-				"(D:\\Dropbox\\Master work\\ver3 experiment\\result\\minute\\"
+				"(D:\\Dropbox\\Master work\\ver3 experiment\\result\\interval\\day\\",
+				"(D:\\Dropbox\\Master work\\ver3 experiment\\result\\interval\\hour\\",
+				"(D:\\Dropbox\\Master work\\ver3 experiment\\result\\interval\\minute\\"
 				};
 		String[][] performancePath = new String[dataPath.length][algorithm.length];
 		for(int i=0;i<basePath.length;i++)
@@ -50,7 +50,7 @@ public class RunEDDM {
 		 */
 		for(int i=0;i<dataPath.length;i++){
 			for(int j=3;j<algorithm.length;j++){
-				String[] task = {"EvaluatePrequential -l "+algorithm[j]+" -s (ArffFileStream -f "+dataPath[i]+") -i "+instanceLimit+" -f "+splitNum[i]+" -q "+splitNum[i]+" -d "+performancePath[i][j]+" -o "+predictPath[i][j]};
+				String[] task = {"EvaluatePrequentialIntervalAccuracy -l "+algorithm[j]+" -s (ArffFileStream -f "+dataPath[i]+") -i "+instanceLimit+" -f "+splitNum[i]+" -q "+splitNum[i]+" -d "+performancePath[i][j]+" -o "+predictPath[i][j]};
 				DoTask.main(task);
 			}
 		}	
