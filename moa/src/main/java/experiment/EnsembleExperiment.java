@@ -51,9 +51,10 @@ public class EnsembleExperiment {
 		/*
 		 *  run task 
 		 */
-		for(int i=0;i<dataPath.length;i++){
-			for(int j=0;j<algorithm.length;j++){
+		for(int i=2;i<dataPath.length;i++){
+			for(int j=1;j<algorithm.length;j++){
 				String[] task = {"EvaluatePrequential -l "+algorithm[j]+" -w "+weightPath[i][j]+" -t "+instanceLimit[i]+") -s (ArffFileStream -f "+dataPath[i]+") -i "+instanceLimit[i]+" -f "+splitNum[i]+" -q "+splitNum[i]}; //+" -d "+performancePath[i][j]+" -o "+predictPath[i][j]};
+				System.out.println(task[0]);
 				DoTask.main(task);
 			}
 		}	
