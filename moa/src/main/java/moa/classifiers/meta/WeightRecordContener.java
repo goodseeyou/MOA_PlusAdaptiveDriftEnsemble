@@ -56,6 +56,7 @@ public class WeightRecordContener {
 	int currentUnusedID;
 	int currentIDs[];
 	int processInsts;
+	int weightProcessInsts;
 	
 	
 	public WeightRecordContener(int size){
@@ -64,6 +65,7 @@ public class WeightRecordContener {
 		this.classifierWeight = new ArrayList<ClassifierWeight>();
 		this.processInsts=0;
 		this.currentIDs = new int[size];
+		this.weightProcessInsts=0;
 		
 	}
 	
@@ -143,6 +145,9 @@ public class WeightRecordContener {
 				}
 				temp+="\n";
 				fw.write(temp);
+				weightProcessInsts++;
+				if(weightProcessInsts%100==0)
+					System.out.println("classifier "+i+", "+weightProcessInsts);
 			}
 			fw.close();
 		} catch (IOException e) {
