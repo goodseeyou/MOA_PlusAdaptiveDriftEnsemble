@@ -149,9 +149,12 @@ public class WeightRecordContener {
 				int classifierContentSize=classifierWeight.get(i).weight.size();
 				for(int j=0;j<classifierContentSize;j++){
 					Double weight = new Double(classifierWeight.get(i).getWeight(j));
-					fw.write(String.valueOf(weight));
+					if(weight.isInfinite())
+						fw.write(String.valueOf(Double.MAX_VALUE));
+					else
+						fw.write(String.valueOf(weight));
 					if(weight.isInfinite() || weight>(sum/(double)j*3.0))
-						weight = (sum+Double.MIN_VALUE)/(double)(j+Double.MIN_VALUE)*3.0; // give a relatedly big number instead of infinite value
+						weight = (sum+Double.MIN_VALUE)/((double)j+Double.MIN_VALUE)*3.0; // give a relatedly big number instead of infinite value
 					sum+=weight;
 					squareSum += Math.pow(weight, 2);
 					if(j<classifierContentSize-1)
