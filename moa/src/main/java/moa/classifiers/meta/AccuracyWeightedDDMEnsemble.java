@@ -170,9 +170,12 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 		this.driftDetectionMethod = ((DriftDetectionMethod) getPreparedClassOption(this.driftDetectionMethodOption)).copy();
 		this.newclassifier =(Classifier) getPreparedClassOption(this.learnerOption);
 		this.newclassifier.resetLearning();
-		currentHoldIndex = this.addToStoredReturnIndex(this.newclassifier,(1.0/Double.MIN_VALUE));
 		
+		currentHoldIndex = this.addToStoredReturnIndex(this.newclassifier,(1.0/Double.MIN_VALUE));
 		weightRecordContener = new WeightRecordContener(this.memberCountOption.getValue());
+		weightRecordContener.addNewID(currentHoldIndex,1.0/Double.MIN_VALUE);
+		
+		
 		
 	}
 
@@ -192,7 +195,7 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 			this.weights[i][0] = 1.0 / (mse_r + this.computeMse(this.learners[(int) this.weights[i][1]], this.currentChunk) + Double.MIN_VALUE);
 			forPassWeight[i] = this.weights[i][0];
 		}	
-		if(this.learners.length>1)
+		if(this.learners.length>0)
 			weightRecordContener.setWeightByInst(forPassWeight);
 		// deal with DDM method
 		int trueClass = (int) inst.classValue();
@@ -248,11 +251,15 @@ public class AccuracyWeightedDDMEnsemble extends AbstractClassifier {
 
 		
 		/**
-		 * this.processChunk(); 
+		 * weight write
 		 */
 		processedInstForWeight++;
-		if(processedInstForWeight>=this.totalInstSizeOption.getValue()){
-			weightRecordContener.write(weightFileOption.getValue());
+		if(processedInstForWeight==this.totalInstSizeOption.getValue()-1){
+				try {
+					weightRecordContener.write(this.weightFileOption.getValue(),this.totalInstSizeOption.getValue());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 		
 	}

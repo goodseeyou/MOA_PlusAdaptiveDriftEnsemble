@@ -65,6 +65,8 @@ public class WeightRecordContener {
 		this.classifierWeight = new ArrayList<ClassifierWeight>();
 		this.processInsts=0;
 		this.currentIDs = new int[size];
+		for(int i=0;i<size;i++)
+			this.currentIDs[i] = -1;
 		this.weightProcessInsts=0;
 		
 	}
@@ -86,7 +88,7 @@ public class WeightRecordContener {
 	}
 	
 	public void addNewID(int index,double weight){
-		if(this.currentIDs[index]>0 && this.currentIDs[index]<this.currentUnusedID){
+		if(this.currentIDs[index]>=0 && this.currentIDs[index]<this.currentUnusedID){
 			/**/
 			/*System.out.println(index+" "+this.currentIDs[index]);
 			System.exit(0);*/
@@ -129,31 +131,47 @@ public class WeightRecordContener {
 		
 	}
 	
-	public void write(String input){
-		try {
+	public void write(String input,int limitSize) throws Exception{
 			FileWriter fw = new FileWriter(input);
-			//FileWriter fw = new FileWriter("D:\\Dropbox\\Master work\\Ensemble\\AWDE_result\\day\\AWDE Weight Record AWDE Hoeffding Tree.csv");
+			input += ".meta.csv";
+			FileWriter metaFw = new FileWriter(input);
+			metaFw.write("ID,count,mean,stdv,startInst,endInst\n");
+			
+			
 			for(int i=0;i<classifierWeight.size();i++){
-				String temp="";
-				temp+=i;
-				for(int j=0;j<classifierWeight.get(i).getStartInst();j++){
-					temp+=",0";
+				double sum=0;
+				double squareSum=0;
+				metaFw.write(i+",");
+				int beginingSize = classifierWeight.get(i).getStartInst();
+				for(int j=0;j<beginingSize;j++){
+					fw.write("-1.0,");
 				}
-				for(int j=0;j<classifierWeight.get(i).weight.size();j++){
-					temp+=",";
-					temp+=classifierWeight.get(i).getWeight(j);
+				int classifierContentSize=classifierWeight.get(i).weight.size();
+				for(int j=0;j<classifierContentSize;j++){
+					Double weight = new Double(classifierWeight.get(i).getWeight(j));
+					fw.write(String.valueOf(weight));
+					if(weight.isInfinite() || weight>(sum/(double)j*3.0))
+						weight = (sum+Double.MIN_VALUE)/(double)(j+Double.MIN_VALUE)*3.0; // give a relatedly big number instead of infinite value
+					sum+=weight;
+					squareSum += Math.pow(weight, 2);
+					if(j<classifierContentSize-1)
+						fw.write(",");
 				}
-				temp+="\n";
-				fw.write(temp);
-				weightProcessInsts++;
-				if(weightProcessInsts%100==0)
-					System.out.println("classifier "+i+", "+weightProcessInsts);
+				int component = limitSize - beginingSize - classifierContentSize;
+				for(int k=0;k<component;k++){
+					fw.write(",-1.0");
+				}
+				fw.write("\n");
+				double mean = sum / (double) classifierContentSize;
+				double stdv = Math.pow((squareSum / (double) classifierContentSize - Math.pow(mean, 2)),0.5);
+				metaFw.write(classifierContentSize+","+mean+","+stdv+","+beginingSize+","+classifierWeight.get(i).getEndInst());
+				metaFw.write("\n");
+				System.out.println("classifier "+i+" finished.");
+				mean=0;
+				stdv=0;
 			}
 			fw.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			metaFw.close();
         
 	}
 	
