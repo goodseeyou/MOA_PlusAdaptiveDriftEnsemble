@@ -6,11 +6,14 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class WeightRecordContener {
 	private class WeightRecorder{
 		double weight[];
+		double relativeWeight[];
 		int classifierID[];
 		public WeightRecorder(int idArray[],double weightArray[]){
 			this.classifierID = idArray;
@@ -58,6 +61,9 @@ public class WeightRecordContener {
 	int processInsts;
 	int weightProcessInsts;
 	
+	private final boolean isRelative = true;
+	private final boolean isUseMax = true;
+	private final double max = 1000000000000000.0;
 	
 	public WeightRecordContener(int size){
 		this.currentUnusedID=0;
@@ -70,8 +76,28 @@ public class WeightRecordContener {
 		this.weightProcessInsts=0;
 		
 	}
-	
+	public boolean isRelativeWeight(){
+		return isRelative;
+	}
+	public boolean isUseMaxWeight(){
+		return isUseMax;
+	}
 	public void setWeightByInst(double weight[]){
+		// relatilize weight
+		if(isRelativeWeight()){
+			double sum =0;
+			for(int i=0;i<weight.length;i++){
+				if(isUseMaxWeight()){
+					Double tmp = new Double(weight[i]);
+					if(tmp.isInfinite() || tmp >max)
+						weight[i] = max;
+				}
+				sum+=weight[i];
+			}
+			for(int i=0;i<weight.length;i++){
+				weight[i] = weight[i] / sum;
+			}
+		}
 		this.weightRecorder.add(this.processInsts, new WeightRecorder(this.currentIDs,weight));
 		for(int i=0;i<weight.length;i++){
 			/**/
@@ -88,6 +114,8 @@ public class WeightRecordContener {
 	}
 	
 	public void addNewID(int index,double weight){
+		weight = -1.0;
+			
 		if(this.currentIDs[index]>=0 && this.currentIDs[index]<this.currentUnusedID){
 			/**/
 			/*System.out.println(index+" "+this.currentIDs[index]);
@@ -136,6 +164,7 @@ public class WeightRecordContener {
 			input += ".meta.csv";
 			FileWriter metaFw = new FileWriter(input);
 			metaFw.write("ID,count,mean,stdv,startInst,endInst\n");
+			NumberFormat formatter = new DecimalFormat("#.###");
 			
 			
 			for(int i=0;i<classifierWeight.size();i++){
@@ -149,14 +178,15 @@ public class WeightRecordContener {
 				int classifierContentSize=classifierWeight.get(i).weight.size();
 				for(int j=0;j<classifierContentSize;j++){
 					Double weight = new Double(classifierWeight.get(i).getWeight(j));
-					if(weight.isInfinite())
-						fw.write(String.valueOf(Double.MAX_VALUE));
+					
+					if((weight.isInfinite() || weight > max) && isUseMaxWeight())
+						fw.write(formatter.format(max));
 					else
-						fw.write(String.valueOf(weight));
-					if(weight.isInfinite() || weight>(sum/(double)j*3.0))
-						weight = (sum+Double.MIN_VALUE)/((double)j+Double.MIN_VALUE)*3.0; // give a relatedly big number instead of infinite value
-					sum+=weight;
-					squareSum += Math.pow(weight, 2);
+						fw.write(String.valueOf(formatter.format(weight)));
+					if(weight>0){
+						sum+=weight;
+						squareSum += Math.pow(weight, 2);
+					}
 					if(j<classifierContentSize-1)
 						fw.write(",");
 				}
@@ -167,7 +197,7 @@ public class WeightRecordContener {
 				fw.write("\n");
 				double mean = sum / (double) classifierContentSize;
 				double stdv = Math.pow((squareSum / (double) classifierContentSize - Math.pow(mean, 2)),0.5);
-				metaFw.write(classifierContentSize+","+mean+","+stdv+","+beginingSize+","+classifierWeight.get(i).getEndInst());
+				metaFw.write(classifierContentSize+","+formatter.format(mean)+","+formatter.format(stdv)+","+beginingSize+","+classifierWeight.get(i).getEndInst());
 				metaFw.write("\n");
 				System.out.println("classifier "+i+" finished.");
 				mean=0;
