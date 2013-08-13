@@ -43,7 +43,7 @@ public class Ver4Experiment {
 		for(int i=0;i<algorithmName.length;i++){
 			System.out.println("----------------------------------");
 			System.out.println(algorithmName[i]);
-			String[] task = {"EvaluateModel -m (LearnModel -l "+algorithms[i]+" -s (ArffFileStream -f (D:\\Dropbox\\Master work\\ver4 experiment\\training.arff))) -s (ArffFileStream -f (D:\\Dropbox\\Master work\\ver4 experiment\\testing.arff))"};
+			String[] task = {"EvaluateModel -m (LearnModel -l "+algorithms[i]+" -s (ArffFileStream -f (D:\\Dropbox\\Master work\\ver4 experiment\\training.arff))) -s (ArffFileStream -f (D:\\Dropbox\\Master work\\ver4 experiment\\testing.arff)) -o (D:\\Dropbox\\Master work\\ver4 experiment\\result\\"+algorithmName[i]+".pred)"};
 			DoTask.main(task);
 			System.out.println("----------------------------------");
 		}
