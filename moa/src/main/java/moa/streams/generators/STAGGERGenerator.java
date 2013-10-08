@@ -81,7 +81,11 @@ public class STAGGERGenerator extends AbstractOptionHandler implements
 
     @Override
     public int determineClass(int size, int color, int shape) {
+<<<<<<< HEAD
         return (size == 0 && color == 0) ? 0 : 1; //size==small && color==red
+=======
+        return (size == 0 && color == 0) ? 1 : 0; //size==small && color==red
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     }
 },
         // function 2
@@ -89,7 +93,11 @@ public class STAGGERGenerator extends AbstractOptionHandler implements
 
     @Override
     public int determineClass(int size, int color, int shape) {
+<<<<<<< HEAD
         return (color == 2 || shape == 1) ? 0 : 1; //color==green || shape==circle
+=======
+        return (color == 2 || shape == 0) ? 1 : 0; //color==green || shape==circle
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     }
 },
         // function 3
@@ -97,7 +105,11 @@ public class STAGGERGenerator extends AbstractOptionHandler implements
 
     @Override
     public int determineClass(int size, int color, int shape) {
+<<<<<<< HEAD
         return (size == 1 || size == 2) ? 0 : 1; // size==medium || size==large
+=======
+        return (size == 1 || size == 2) ? 1 : 0; // size==medium || size==large
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     }
 }
     };

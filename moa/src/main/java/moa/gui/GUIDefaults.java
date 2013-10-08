@@ -136,7 +136,11 @@ public class GUIDefaults
         String tabs;
 
         // read and split on comma
+<<<<<<< HEAD
         tabs = get("Tabs", "moa.gui.ClassificationTabPanel,moa.gui.clustertab.ClusteringTabPanel");
+=======
+        tabs = get("Tabs", "moa.gui.ClassificationTabPanel,moa.gui.clustertab.ClusteringTabPanel, moa.gui.outliertab.OutlierTabPanel");
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         result = tabs.split(",");
 
         return result;

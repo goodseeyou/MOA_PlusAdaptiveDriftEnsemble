@@ -3,6 +3,7 @@
  *    Copyright (C) 2010 RWTH Aachen University, Germany
  *    @author Jansen (moa@cs.rwth-aachen.de)
  *
+<<<<<<< HEAD
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 3 of the License, or
@@ -15,6 +16,20 @@
  *
  *    You should have received a copy of the GNU General Public License
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+=======
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  *    
  */
 
@@ -277,12 +292,21 @@ public class ClusteringVisualTab extends javax.swing.JPanel implements ActionLis
         gridBagConstraints.weighty = 1.0;
         topWrapper.add(panelVisualWrapper, gridBagConstraints);
 
+<<<<<<< HEAD
         panelControl.setMinimumSize(new java.awt.Dimension(600, 52));
         panelControl.setPreferredSize(new java.awt.Dimension(600, 52));
         panelControl.setLayout(new java.awt.GridBagLayout());
 
         buttonRun.setText("Start");
         buttonRun.setPreferredSize(new java.awt.Dimension(90, 23));
+=======
+        panelControl.setMinimumSize(new java.awt.Dimension(600, 76));
+        panelControl.setPreferredSize(new java.awt.Dimension(2000, 76));
+        panelControl.setLayout(new java.awt.GridBagLayout());
+
+        buttonRun.setText("Start");
+        buttonRun.setPreferredSize(new java.awt.Dimension(70, 33));
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         buttonRun.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonRunMouseClicked(evt);
@@ -300,7 +324,11 @@ public class ClusteringVisualTab extends javax.swing.JPanel implements ActionLis
         panelControl.add(buttonRun, gridBagConstraints);
 
         buttonStop.setText("Stop");
+<<<<<<< HEAD
         buttonStop.setPreferredSize(new java.awt.Dimension(90, 23));
+=======
+        buttonStop.setPreferredSize(new java.awt.Dimension(70, 33));
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         buttonStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonStopActionPerformed(evt);
@@ -323,11 +351,20 @@ public class ClusteringVisualTab extends javax.swing.JPanel implements ActionLis
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 1, 5);
+<<<<<<< HEAD
         panelControl.add(buttonScreenshot, gridBagConstraints);
 
         speedSlider.setValue(100);
         speedSlider.setBorder(javax.swing.BorderFactory.createTitledBorder("Visualisation Speed"));
         speedSlider.setPreferredSize(new java.awt.Dimension(120, 48));
+=======
+        // ### panelControl.add(buttonScreenshot, gridBagConstraints);
+
+        speedSlider.setValue(100);
+        speedSlider.setBorder(javax.swing.BorderFactory.createTitledBorder("Visualisation Speed"));
+        speedSlider.setMinimumSize(new java.awt.Dimension(150, 68));
+        speedSlider.setPreferredSize(new java.awt.Dimension(160, 68));
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         speedSlider.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 speedSliderMouseDragged(evt);
@@ -345,7 +382,11 @@ public class ClusteringVisualTab extends javax.swing.JPanel implements ActionLis
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+<<<<<<< HEAD
         panelControl.add(jLabel1, gridBagConstraints);
+=======
+        panelControl.add(jLabel1, gridBagConstraints);        
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
         comboX.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dim 1", "Dim 2", "Dim 3", "Dim 4" }));
         comboX.addActionListener(new java.awt.event.ActionListener() {
@@ -471,13 +512,22 @@ public class ClusteringVisualTab extends javax.swing.JPanel implements ActionLis
 
         numPauseAfterPoints.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         numPauseAfterPoints.setText(Integer.toString(RunVisualizer.initialPauseInterval));
+<<<<<<< HEAD
         numPauseAfterPoints.setPreferredSize(new java.awt.Dimension(70, 20));
+=======
+        numPauseAfterPoints.setMinimumSize(new java.awt.Dimension(70, 25));
+        numPauseAfterPoints.setPreferredSize(new java.awt.Dimension(70, 25));
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         panelControl.add(numPauseAfterPoints, gridBagConstraints);
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

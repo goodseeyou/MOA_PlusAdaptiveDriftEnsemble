@@ -29,9 +29,15 @@ public class Globals {
 
     public static final String workbenchTitle = "{M}assive {O}nline {A}nalysis";
 
+<<<<<<< HEAD
     public static final String versionString = "12.08 August 2012";
 
     public static final String copyrightNotice = "(C) 2007-2012 University of Waikato, Hamilton, New Zealand";
+=======
+    public static final String versionString = "13.08 August 2013";
+
+    public static final String copyrightNotice = "(C) 2007-2013 University of Waikato, Hamilton, New Zealand";
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
     public static final String webAddress = "http://moa.cs.waikato.ac.nz/";
 

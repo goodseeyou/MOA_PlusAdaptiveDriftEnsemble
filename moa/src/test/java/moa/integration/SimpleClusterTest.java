@@ -20,7 +20,11 @@ import junit.framework.TestCase;
 public class SimpleClusterTest extends TestCase {
 
 	final static String [] Clusterers = new String[]{"ClusterGenerator", "CobWeb", "KMeans", 
+<<<<<<< HEAD
 		"clustream.Clustream", "clustree.ClusTree", "denstream.DenStream -i 1000", "streamkm.StreamKM"};
+=======
+		"clustream.Clustream", "clustree.ClusTree", "denstream.WithDBSCAN -i 1000", "streamkm.StreamKM"};
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 	
 	@Test
 	public void testClusterGenerator(){testClusterer(Clusterers[0]);}

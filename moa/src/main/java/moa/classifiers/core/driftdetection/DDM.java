@@ -19,10 +19,15 @@
  */
 package moa.classifiers.core.driftdetection;
 
+<<<<<<< HEAD
 import weka.core.Instance;
 import moa.core.ObjectRepository;
 import moa.options.AbstractOptionHandler;
 import moa.options.FloatOption;
+=======
+import moa.core.ObjectRepository;
+import moa.options.AbstractOptionHandler;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.options.IntOption;
 import moa.tasks.TaskMonitor;
 
@@ -44,6 +49,7 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
             'n',
             "The minimum number of instances before permitting detecting change.",
             30, 0, Integer.MAX_VALUE);
+<<<<<<< HEAD
     
     public FloatOption alphaOption = new FloatOption(
     		"alphaOption",
@@ -52,6 +58,9 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
     		1.0, 0.0, Double.MAX_VALUE);
 
     
+=======
+
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     private int m_n;
 
     private double m_p;
@@ -102,6 +111,7 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
 
 
 
+<<<<<<< HEAD
         if (m_n > minNumInstancesOption.getValue() && m_p + m_s > m_pmin + 3 * alphaOption.getValue() * m_smin) {
             //System.out.println(m_p + ",D");
             initialize();
@@ -111,6 +121,17 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
             return DDM_WARNING_LEVEL;
         } else {
             //System.out.println(m_p + ",N");
+=======
+        if (m_n > minNumInstancesOption.getValue() && m_p + m_s > m_pmin + 3 * m_smin) {
+            System.out.println(m_p + ",D");
+            initialize();
+            return DDM_OUTCONTROL_LEVEL;
+        } else if (m_p + m_s > m_pmin + 2 * m_smin) {
+            System.out.println(m_p + ",W");
+            return DDM_WARNING_LEVEL;
+        } else {
+            System.out.println(m_p + ",N");
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
             return DDM_INCONTROL_LEVEL;
         }
     }
@@ -130,10 +151,13 @@ public class DDM extends AbstractOptionHandler implements DriftDetectionMethod {
     public DriftDetectionMethod copy() {
         return (DriftDetectionMethod) super.copy();
     }
+<<<<<<< HEAD
 
 	@Override
 	public int computeNextVal(boolean prediction, Instance inst) {
 		// TODO Auto-generated method stub
 		return this.computeNextVal(prediction);
 	}
+=======
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 }

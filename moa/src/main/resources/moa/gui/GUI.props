@@ -6,5 +6,9 @@
 # The tabs to display 
 #
 # The classes listed here must be derived from the abstract class moa.gui.AbstractTabPanel 
+<<<<<<< HEAD
 Tabs=moa.gui.ClassificationTabPanel,moa.gui.clustertab.ClusteringTabPanel
+=======
+Tabs=moa.gui.ClassificationTabPanel,moa.gui.RegressionTabPanel,moa.gui.clustertab.ClusteringTabPanel,moa.gui.outliertab.OutlierTabPanel
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 

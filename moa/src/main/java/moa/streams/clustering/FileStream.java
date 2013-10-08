@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *    ClusteringStream.java
  *    Copyright (C) 2010 RWTH Aachen University, Germany
@@ -15,6 +16,29 @@
  *
  *    You should have received a copy of the GNU General Public License
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+=======
+/**
+ * [FileStream.java]
+ * 
+ * @author Timm Jansen
+ * @editor Yunsu Kim
+ * 
+ * Last Edited: 2013/06/27
+ * Data Management and Data Exploration Group, RWTH Aachen University
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  *    
  */
 
@@ -53,7 +77,11 @@ public class FileStream extends ClusteringStream{
 	private static final long serialVersionUID = 1L;
 
 
+<<<<<<< HEAD
     String defaultfile = "";
+=======
+    String defaultfile = "/Users/kokomo40/Dropbox/BT Kim/Datasets/KDDCUP99/KDDCup99.arff";
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
 	public FileOption arffFileOption = new FileOption("arffFile", 'f',
 			"ARFF file to load.", defaultfile, "arff", false);
@@ -229,11 +257,21 @@ public class FileStream extends ClusteringStream{
 				//set adjusted dataset for instance
 				rawInstance.setDataset(filteredDataset);
 
+<<<<<<< HEAD
 				if(normalizeOption.isSet() && valuesMinMaxDiff!=null){
 					for (int i = 0; i < rawInstance.numAttributes() ; i++) {
 						if(valuesMinMaxDiff.get(i)[2]!=1 && i!=rawInstance.classIndex()){
 							double v = rawInstance.value(i);
 							v = (v - valuesMinMaxDiff.get(i)[0])/valuesMinMaxDiff.get(i)[2];
+=======
+				if (normalizeOption.isSet() && valuesMinMaxDiff != null) {
+					for (int i = 0; i < rawInstance.numAttributes() ; i++) {
+						if (valuesMinMaxDiff.get(i)[2] != 1 &&		// Already normalized
+							valuesMinMaxDiff.get(i)[2] != 0 &&		// Max. value is 0 (unable to be normalized)
+							i != rawInstance.classIndex()) {		// Class label is not subject to be normalized
+							double v = rawInstance.value(i);
+							v = (v - valuesMinMaxDiff.get(i)[0]) / valuesMinMaxDiff.get(i)[2];
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 							rawInstance.setValue(i, v);
 						}
 					}

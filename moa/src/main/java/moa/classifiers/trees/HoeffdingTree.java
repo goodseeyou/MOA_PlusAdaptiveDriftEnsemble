@@ -150,8 +150,13 @@ public class HoeffdingTree extends AbstractClassifier {
             't', "Threshold below which a split will be forced to break ties.",
             0.05, 0.0, 1.0);
 
+<<<<<<< HEAD
     public FlagOption binarySplitsOption = new FlagOption("binarySplits", 'b',
             "Only allow binary splits.");
+=======
+public FlagOption binarySplitsOption = new FlagOption("binarySplits", 'b',
+        "Only allow binary splits.");
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
     public FlagOption stopMemManagementOption = new FlagOption(
             "stopMemManagement", 'z',
@@ -251,7 +256,11 @@ public class HoeffdingTree extends AbstractClassifier {
 
         protected InstanceConditionalTest splitTest;
 
+<<<<<<< HEAD
         protected AutoExpandVector<Node> children = new AutoExpandVector<Node>();
+=======
+        protected AutoExpandVector<Node> children; // = new AutoExpandVector<Node>();
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
         @Override
         public int calcByteSize() {
@@ -271,11 +280,28 @@ public class HoeffdingTree extends AbstractClassifier {
         }
 
         public SplitNode(InstanceConditionalTest splitTest,
+<<<<<<< HEAD
                 double[] classObservations) {
             super(classObservations);
             this.splitTest = splitTest;
         }
 
+=======
+                double[] classObservations, int size) {
+            super(classObservations);
+            this.splitTest = splitTest;
+            this.children = new AutoExpandVector<Node>(size);
+        }
+        
+        public SplitNode(InstanceConditionalTest splitTest,
+                double[] classObservations) {
+            super(classObservations);
+            this.splitTest = splitTest;
+            this.children = new AutoExpandVector<Node>();
+        }
+
+
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         public int numChildren() {
             return this.children.size();
         }
@@ -379,10 +405,19 @@ public class HoeffdingTree extends AbstractClassifier {
         protected double weightSeenAtLastSplitEvaluation;
 
         protected AutoExpandVector<AttributeClassObserver> attributeObservers = new AutoExpandVector<AttributeClassObserver>();
+<<<<<<< HEAD
+=======
+        
+        protected boolean isInitialized;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
         public ActiveLearningNode(double[] initialClassObservations) {
             super(initialClassObservations);
             this.weightSeenAtLastSplitEvaluation = getWeightSeen();
+<<<<<<< HEAD
+=======
+            this.isInitialized = false;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         }
 
         @Override
@@ -393,6 +428,13 @@ public class HoeffdingTree extends AbstractClassifier {
 
         @Override
         public void learnFromInstance(Instance inst, HoeffdingTree ht) {
+<<<<<<< HEAD
+=======
+            if (this.isInitialized == false) {
+                this.attributeObservers = new AutoExpandVector<AttributeClassObserver>(inst.numAttributes());
+                this.isInitialized = true;
+            }
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
             this.observedClassDistribution.addToValue((int) inst.classValue(),
                     inst.weight());
             for (int i = 0; i < inst.numAttributes() - 1; i++) {
@@ -583,9 +625,21 @@ public class HoeffdingTree extends AbstractClassifier {
 
     //Procedure added for Hoeffding Adaptive Trees (ADWIN)
     protected SplitNode newSplitNode(InstanceConditionalTest splitTest,
+<<<<<<< HEAD
             double[] classObservations) {
         return new SplitNode(splitTest, classObservations);
     }
+=======
+            double[] classObservations, int size) {
+        return new SplitNode(splitTest, classObservations, size);
+    }
+    
+    protected SplitNode newSplitNode(InstanceConditionalTest splitTest,
+            double[] classObservations) {
+        return new SplitNode(splitTest, classObservations);
+    }
+    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
     protected AttributeClassObserver newNominalClassObserver() {
         AttributeClassObserver nominalClassObserver = (AttributeClassObserver) getPreparedClassOption(this.nominalEstimatorOption);
@@ -655,7 +709,11 @@ public class HoeffdingTree extends AbstractClassifier {
                     deactivateLearningNode(node, parent, parentIndex);
                 } else {
                     SplitNode newSplit = newSplitNode(splitDecision.splitTest,
+<<<<<<< HEAD
                             node.getObservedClassDistribution());
+=======
+                            node.getObservedClassDistribution(),splitDecision.numSplits() );
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
                     for (int i = 0; i < splitDecision.numSplits(); i++) {
                         Node newChild = newLearningNode(splitDecision.resultingClassDistributionFromSplit(i));
                         newSplit.setChild(i, newChild);

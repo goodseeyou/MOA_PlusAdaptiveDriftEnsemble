@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *    CFCluster.java
  *    Copyright (C) 2010 RWTH Aachen University, Germany
@@ -15,6 +16,30 @@
  *
  *    You should have received a copy of the GNU General Public License
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+=======
+/**
+ * Clustering.java
+ * 
+ * Represents a collection of clusters.
+ * 
+ * @author Timm Jansen (moa@cs.rwth-aachen.de)
+ * @editor Yunsu Kim
+ * 
+ * Last edited: 2013/06/02
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  *    
  */
 
@@ -23,6 +48,7 @@ package moa.cluster;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+<<<<<<< HEAD
 import moa.AbstractMOAObject;
 import moa.core.AutoExpandVector;
 import moa.gui.visualization.DataPoint;
@@ -31,6 +57,15 @@ import weka.core.Instance;
 /**
  * Represents a collection of clusters.
  */
+=======
+
+import moa.AbstractMOAObject;
+import moa.core.AutoExpandVector;
+import moa.gui.visualization.DataPoint;
+import weka.core.Attribute;
+import weka.core.Instance;
+
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 public class Clustering extends AbstractMOAObject{
 
     private AutoExpandVector<Cluster> clusters;
@@ -51,6 +86,18 @@ public class Clustering extends AbstractMOAObject{
         int dim = points.get(0).dataset().numAttributes()-1;
 
         int numClasses = labelMap.size();
+<<<<<<< HEAD
+=======
+        int noiseLabel;
+        
+        Attribute classLabel = points.get(0).dataset().classAttribute();
+        int lastLabelIndex = classLabel.numValues() - 1;
+        if (classLabel.value(lastLabelIndex) == "noise") {
+        	noiseLabel = lastLabelIndex;
+        } else {
+        	noiseLabel = -1;
+        }
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
         ArrayList<Instance>[] sorted_points = (ArrayList<Instance>[]) new ArrayList[numClasses];
         for (int i = 0; i < numClasses; i++) {
@@ -58,7 +105,11 @@ public class Clustering extends AbstractMOAObject{
         }
         for (Instance point : points) {
             int clusterid = (int)point.classValue();
+<<<<<<< HEAD
             if(clusterid == -1) continue;
+=======
+            if(clusterid == noiseLabel) continue;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
             sorted_points[labelMap.get(clusterid)].add((Instance)point);
         }
         this.clusters = new AutoExpandVector<Cluster>();

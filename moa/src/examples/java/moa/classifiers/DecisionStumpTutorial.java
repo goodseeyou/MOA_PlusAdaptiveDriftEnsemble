@@ -1,10 +1,13 @@
 package moa.classifiers;
 
+<<<<<<< HEAD
 import moa.classifiers.core.AttributeSplitSuggestion;
 import moa.classifiers.core.attributeclassobservers.AttributeClassObserver;
 import moa.classifiers.core.attributeclassobservers.GaussianNumericAttributeClassObserver;
 import moa.classifiers.core.attributeclassobservers.NominalAttributeClassObserver;
 import moa.classifiers.core.splitcriteria.SplitCriterion;
+=======
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.core.AutoExpandVector;
 import moa.core.DoubleVector;
 import moa.options.ClassOption;

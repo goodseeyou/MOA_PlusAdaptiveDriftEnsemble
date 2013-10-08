@@ -19,7 +19,10 @@
  */
 package moa.classifiers.core.driftdetection;
 
+<<<<<<< HEAD
 import weka.core.Instance;
+=======
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.options.OptionHandler;
 
 /**
@@ -35,10 +38,15 @@ public interface DriftDetectionMethod extends OptionHandler {
     public static final int DDM_WARNING_LEVEL = 1;
 
     public static final int DDM_OUTCONTROL_LEVEL = 2;
+<<<<<<< HEAD
     
     public int computeNextVal(boolean prediction);
     // follow add inst parameter for inst
     public int computeNextVal(boolean prediction,Instance inst);
+=======
+
+    public int computeNextVal(boolean prediction);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
     public void getDescription(StringBuilder sb, int indent);
     

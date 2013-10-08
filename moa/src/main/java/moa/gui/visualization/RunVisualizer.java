@@ -3,6 +3,7 @@
  *    Copyright (C) 2010 RWTH Aachen University, Germany
  *    @author Jansen (moa@cs.rwth-aachen.de)
  *
+<<<<<<< HEAD
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 3 of the License, or
@@ -15,13 +16,30 @@
  *
  *    You should have received a copy of the GNU General Public License
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+=======
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  *    
  */
 
 package moa.gui.visualization;
 
 import java.awt.Color;
+<<<<<<< HEAD
 import java.awt.Component;
+=======
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -31,6 +49,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+<<<<<<< HEAD
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import moa.cluster.Cluster;
@@ -44,12 +63,32 @@ import moa.gui.clustertab.ClusteringVisualTab;
 import moa.streams.clustering.ClusterEvent;
 import weka.core.Instance;
 import moa.gui.clustertab.ClusteringSetupTab;
+=======
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import moa.cluster.Cluster;
+import moa.cluster.Clustering;
+import moa.clusterers.AbstractClusterer;
+import moa.clusterers.ClusterGenerator;
+import moa.evaluation.MeasureCollection;
+import moa.gui.TextViewerPanel;
+import moa.gui.clustertab.ClusteringSetupTab;
+import moa.gui.clustertab.ClusteringVisualEvalPanel;
+import moa.gui.clustertab.ClusteringVisualTab;
+import moa.streams.clustering.ClusterEvent;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.streams.clustering.ClusterEventListener;
 import moa.streams.clustering.ClusteringStream;
 import moa.streams.clustering.RandomRBFGeneratorEvents;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.FastVector;
+<<<<<<< HEAD
+=======
+import weka.core.Instance;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import weka.core.Instances;
 
 public class RunVisualizer implements Runnable, ActionListener, ClusterEventListener{
@@ -349,7 +388,11 @@ public class RunVisualizer implements Runnable, ActionListener, ClusterEventList
         evaluateClustering(evalClustering0, gtClustering0, points0, true);
         evaluateClustering(evalClustering1, gtClustering1, points1, false);
 
+<<<<<<< HEAD
         drawClusterings();
+=======
+        drawClusterings(points0, points1);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     }
 
     private void evaluateClustering(Clustering found_clustering, Clustering trueClustering, ArrayList<DataPoint> points, boolean algorithm0){
@@ -391,6 +434,7 @@ public class RunVisualizer implements Runnable, ActionListener, ClusterEventList
         m_graphcanvas.updateCanvas();
     }
 
+<<<<<<< HEAD
     public void drawClusterings(){
         if(macro0!= null && macro0.size() > 0)
                 m_streampanel0.drawMacroClustering(macro0, Color.BLUE);
@@ -406,6 +450,23 @@ public class RunVisualizer implements Runnable, ActionListener, ClusterEventList
                     m_streampanel1.drawMicroClustering(micro1, Color.GREEN);
             if(gtClustering1!= null && gtClustering1.size() > 0)
                 m_streampanel1.drawGTClustering(gtClustering1, Color.BLACK);
+=======
+    public void drawClusterings(List<DataPoint> points0, List<DataPoint> points1){
+        if(macro0!= null && macro0.size() > 0)
+                m_streampanel0.drawMacroClustering(macro0, points0, Color.RED);
+        if(micro0!= null && micro0.size() > 0)
+                m_streampanel0.drawMicroClustering(micro0, points0, Color.GREEN);
+        if(gtClustering0!= null && gtClustering0.size() > 0)
+            m_streampanel0.drawGTClustering(gtClustering0, points0, Color.BLACK);
+
+        if(m_clusterer1!=null){
+            if(macro1!= null && macro1.size() > 0)
+                    m_streampanel1.drawMacroClustering(macro1, points1, Color.BLUE);
+            if(micro1!= null && micro1.size() > 0)
+                    m_streampanel1.drawMicroClustering(micro1, points1, Color.GREEN);
+            if(gtClustering1!= null && gtClustering1.size() > 0)
+                m_streampanel1.drawGTClustering(gtClustering1, points1, Color.BLACK);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         }
     }
 

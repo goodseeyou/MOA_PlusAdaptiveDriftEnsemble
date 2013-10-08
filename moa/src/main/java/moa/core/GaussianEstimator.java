@@ -47,8 +47,13 @@ public class GaussianEstimator extends AbstractMOAObject {
         if (this.weightSum > 0.0) {
             this.weightSum += weight;
             double lastMean = this.mean;
+<<<<<<< HEAD
             this.mean += (value - lastMean) / this.weightSum;
             this.varianceSum += (value - lastMean) * (value - this.mean);
+=======
+            this.mean += weight * (value - lastMean) / this.weightSum; 
+            this.varianceSum += weight * (value - lastMean) * (value - this.mean);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         } else {
             this.mean = value;
             this.weightSum = weight;
@@ -56,11 +61,25 @@ public class GaussianEstimator extends AbstractMOAObject {
     }
 
     public void addObservations(GaussianEstimator obs) {
+<<<<<<< HEAD
         if ((this.weightSum > 0.0) && (obs.weightSum > 0.0)) {
             this.mean = (this.mean * (this.weightSum / (this.weightSum + obs.weightSum)))
                     + (obs.mean * (obs.weightSum / (this.weightSum + obs.weightSum)));
             this.weightSum += obs.weightSum;
             this.varianceSum += obs.varianceSum;
+=======
+        // Follows Variance Combination Rule in Section 2 of
+        // Brian Babcock, Mayur Datar, Rajeev Motwani, Liadan O'Callaghan:
+        // Maintaining variance and k-medians over data stream windows. PODS 2003: 234-243
+        //
+        if ((this.weightSum > 0.0) && (obs.weightSum > 0.0)) {
+            double oldMean = this.mean;
+            this.mean = (this.mean * (this.weightSum / (this.weightSum + obs.weightSum)))
+                    + (obs.mean * (obs.weightSum / (this.weightSum + obs.weightSum)));
+            this.varianceSum += obs.varianceSum + (this.weightSum * obs.weightSum / (this.weightSum + obs.weightSum) *
+                                 Math.pow(obs.mean-oldMean, 2));
+            this.weightSum += obs.weightSum;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         }
     }
 

@@ -24,7 +24,10 @@ import java.io.Serializable;
 import moa.classifiers.core.AttributeSplitSuggestion;
 import moa.classifiers.core.conditionaltests.NumericAttributeBinaryTest;
 import moa.classifiers.core.splitcriteria.SplitCriterion;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.core.DoubleVector;
 import moa.core.ObjectRepository;
 import moa.options.AbstractOptionHandler;
@@ -175,4 +178,13 @@ public class BinaryTreeNumericAttributeClassObserver extends AbstractOptionHandl
     protected void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
         // TODO Auto-generated method stub
     }
+<<<<<<< HEAD
+=======
+    
+    @Override
+    public void observeAttributeTarget(double attVal, double target) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+   
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 }

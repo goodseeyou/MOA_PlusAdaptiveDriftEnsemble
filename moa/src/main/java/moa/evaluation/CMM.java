@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *    CMM.java
  *    Copyright (C) 2010 RWTH Aachen University, Germany
@@ -36,6 +37,37 @@
 package moa.evaluation;
 
 import java.util.ArrayList;
+=======
+/**
+ * [CMM.java]
+ * 
+ * CMM: Main class
+ * 
+ * Reference: Kremer et al., "An Effective Evaluation Measure for Clustering on Evolving Data Streams", KDD, 2011
+ * 
+ * @author Timm jansen
+ * Data Management and Data Exploration Group, RWTH Aachen University
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+ *    
+ */
+
+package moa.evaluation;
+
+import java.util.ArrayList;
+
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.cluster.Cluster;
 import moa.cluster.Clustering;
 import moa.cluster.SphereCluster;
@@ -44,7 +76,15 @@ import moa.gui.visualization.DataPoint;
 
 
 public class CMM extends MeasureCollection{
+<<<<<<< HEAD
     /**
+=======
+    
+	
+	private static final long serialVersionUID = 1L;
+
+	/**
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
      * found clustering
      */
 	private Clustering clustering;

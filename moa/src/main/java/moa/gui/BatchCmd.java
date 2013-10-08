@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *    BatchCmd.java
  *    Copyright (C) 2010 RWTH Aachen University, Germany
@@ -15,6 +16,28 @@
  *
  *    You should have received a copy of the GNU General Public License
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+=======
+/**
+ * BatchCmd.java
+ * 
+ * @author Timm Jansen (moa@cs.rwth-aachen.de)
+ * @editor Yunsu Kim
+ * 
+ * Last edited: 2013/06/02
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  *    
  */
 
@@ -28,25 +51,44 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+<<<<<<< HEAD
 import moa.clusterers.ClusterGenerator;
 import moa.cluster.Clustering;
 import moa.clusterers.AbstractClusterer;
 import moa.clusterers.clustream.Clustream;
+=======
+
+import moa.cluster.Clustering;
+import moa.clusterers.AbstractClusterer;
+import moa.clusterers.ClusterGenerator;
+import moa.clusterers.clustream.WithKmeans;
+import moa.evaluation.EntropyCollection;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.evaluation.F1;
 import moa.evaluation.General;
 import moa.evaluation.MeasureCollection;
 import moa.evaluation.SSQ;
 import moa.evaluation.SilhouetteCoefficient;
 import moa.evaluation.StatisticalCollection;
+<<<<<<< HEAD
 import moa.evaluation.EntropyCollection;
 import moa.gui.visualization.DataPoint;
 import moa.gui.visualization.RunVisualizer;
 import moa.streams.clustering.ClusterEvent;
 import weka.core.Instance;
+=======
+import moa.gui.visualization.DataPoint;
+import moa.gui.visualization.RunVisualizer;
+import moa.streams.clustering.ClusterEvent;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.streams.clustering.ClusterEventListener;
 import moa.streams.clustering.ClusteringStream;
 import moa.streams.clustering.RandomRBFGeneratorEvents;
 import weka.core.DenseInstance;
+<<<<<<< HEAD
+=======
+import weka.core.Instance;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
 public class BatchCmd implements ClusterEventListener{
 
@@ -97,7 +139,11 @@ public class BatchCmd implements ClusterEventListener{
 	/* TODO read args from command line */
 	public static void main(String[] args){
 		RandomRBFGeneratorEvents stream = new RandomRBFGeneratorEvents();
+<<<<<<< HEAD
 		AbstractClusterer clusterer = new Clustream();
+=======
+		AbstractClusterer clusterer = new WithKmeans();
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 		int measureCollectionType = 0;
 		int amountInstances = 20000;
 		String testfile = "d:\\data\\test.csv";
@@ -218,6 +264,7 @@ public class BatchCmd implements ClusterEventListener{
 	public static void exportCSV(String filepath, ArrayList<ClusterEvent> clusterEvents, MeasureCollection[] measures, int horizon) {
 		PrintWriter out = null;
 		try {
+<<<<<<< HEAD
 			if(!filepath.endsWith(".csv"))
 				filepath+=".csv";
 			out = new PrintWriter(new BufferedWriter(new FileWriter(filepath)));
@@ -239,6 +286,26 @@ public class BatchCmd implements ClusterEventListener{
 					for (int j = 0; j < measures[i].getNumMeasures(); j++) {
 						if(measures[i].isEnabled(j)){
 							out.write(measures[i].getName(j)+del);
+=======
+			// Prepare an output file			
+			if (!filepath.endsWith(".csv")) {
+				filepath += ".csv";
+			}
+			out = new PrintWriter(new BufferedWriter(new FileWriter(filepath)));
+			
+			
+			String delimiter = ";";
+
+			// Header
+			int numValues = 0;
+			out.write("Nr" + delimiter);
+			out.write("Event" + delimiter);
+			for (int m = 0; m < 1; m++) {	// TODO: Multiple group of measures
+				for (int i = 0; i < measures.length; i++) {
+					for (int j = 0; j < measures[i].getNumMeasures(); j++) {
+						if (measures[i].isEnabled(j)) {
+							out.write(measures[i].getName(j) + delimiter);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 							numValues = measures[i].getNumberOfValues(j);
 						}
 					}
@@ -246,6 +313,7 @@ public class BatchCmd implements ClusterEventListener{
 			}
 			out.write("\n");
 
+<<<<<<< HEAD
 
 			//rows
 			for (int v = 0; v < numValues; v++){
@@ -270,13 +338,53 @@ public class BatchCmd implements ClusterEventListener{
 						for (int j = 0; j < measures[i].getNumMeasures(); j++) {
 							if(measures[i].isEnabled(j)){
 								out.write(measures[i].getValue(j, v)+del);
+=======
+			// Rows
+			Iterator<ClusterEvent> eventIt = null;
+			ClusterEvent event = null;
+			if (clusterEvents != null) {
+				if (clusterEvents.size() > 0) {
+					eventIt = clusterEvents.iterator();
+					event = eventIt.next();
+				}
+			}
+			
+			for (int v = 0; v < numValues; v++){
+				// Nr
+				out.write(v + delimiter);
+
+				// Events
+				if (event != null && event.getTimestamp() <= horizon) {
+					out.write(event.getType() + delimiter);
+					if (eventIt != null && eventIt.hasNext()) {
+						event = eventIt.next();
+					} else {
+						event = null;
+					}
+				} else {
+					out.write(delimiter);
+				}
+
+				// Values
+				for (int m = 0; m < 1; m++) {	// TODO: Multiple group of measures
+					for (int i = 0; i < measures.length; i++) {
+						for (int j = 0; j < measures[i].getNumMeasures(); j++) {
+							if (measures[i].isEnabled(j)) {
+								out.write(measures[i].getValue(j, v) + delimiter);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 							}
 						}
 					}
 				}
 				out.write("\n");
 			}
+<<<<<<< HEAD
 			out.close();
+=======
+			
+			out.close();
+			
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 		} catch (IOException ex) {
 			Logger.getLogger(RunVisualizer.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {

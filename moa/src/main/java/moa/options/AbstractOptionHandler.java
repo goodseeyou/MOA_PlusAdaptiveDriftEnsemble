@@ -26,6 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 import moa.AbstractMOAObject;
+<<<<<<< HEAD
+=======
+import moa.clusterers.AbstractClusterer;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.core.ObjectRepository;
 import moa.tasks.NullMonitor;
 import moa.tasks.TaskMonitor;
@@ -164,12 +168,42 @@ public abstract class AbstractOptionHandler extends AbstractMOAObject implements
                 }
                 this.classOptionNamesToPreparedObjects.put(option.getName(),
                         optionObj);
+<<<<<<< HEAD
+=======
+            } else if (option instanceof ClassOptionWithNames) {
+                ClassOptionWithNames classOption = (ClassOptionWithNames) option;
+                monitor.setCurrentActivity("Materializing option "
+                        + classOption.getName() + "...", -1.0);
+                Object optionObj = classOption.materializeObject(monitor,
+                        repository);
+                if (monitor.taskShouldAbort()) {
+                    return;
+                }
+                if (optionObj instanceof OptionHandler) {
+                    monitor.setCurrentActivity("Preparing option "
+                            + classOption.getName() + "...", -1.0);
+                    ((OptionHandler) optionObj).prepareForUse(monitor,
+                            repository);
+                    if (monitor.taskShouldAbort()) {
+                        return;
+                    }
+                }
+                if (this.classOptionNamesToPreparedObjects == null) {
+                    this.classOptionNamesToPreparedObjects = new HashMap<String, Object>();
+                }
+                this.classOptionNamesToPreparedObjects.put(option.getName(),
+                        optionObj);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
             }
         }
     }
 
     /**
+<<<<<<< HEAD
      *  Gets a prepared option of this class.
+=======
+     * Gets a prepared option of this class.
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
      *
      * @param opt the class option to get
      * @return an option stored in the dictionary
@@ -177,4 +211,17 @@ public abstract class AbstractOptionHandler extends AbstractMOAObject implements
     protected Object getPreparedClassOption(ClassOption opt) {
         return this.classOptionNamesToPreparedObjects.get(opt.getName());
     }
+<<<<<<< HEAD
+=======
+    
+    /**
+     * Gets a prepared option of this class.
+     * 
+     * @param opt - ClassOptionWithNames
+     * @return an option stored in the dictionary
+     */
+    protected Object getPreparedClassOption(ClassOptionWithNames opt) {
+		return this.classOptionNamesToPreparedObjects.get(opt.getName());
+	}
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 }

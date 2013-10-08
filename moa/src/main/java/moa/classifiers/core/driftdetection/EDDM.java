@@ -19,7 +19,10 @@
  */
 package moa.classifiers.core.driftdetection;
 
+<<<<<<< HEAD
 import weka.core.Instance;
+=======
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import moa.core.ObjectRepository;
 import moa.options.AbstractOptionHandler;
 import moa.tasks.TaskMonitor;
@@ -111,16 +114,28 @@ public class EDDM extends AbstractOptionHandler implements DriftDetectionMethod 
                 // System.out.print(p + " ");
                 if (m_n > FDDM_MINNUMINSTANCES && m_numErrors > m_minNumErrors
                         && p < FDDM_OUTCONTROL) {
+<<<<<<< HEAD
                     //System.out.println(m_mean + ",D");
+=======
+                    System.out.println(m_mean + ",D");
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
                     initialize();
                     return DDM_OUTCONTROL_LEVEL;
                 } else if (m_n > FDDM_MINNUMINSTANCES
                         && m_numErrors > m_minNumErrors && p < FDDM_WARNING) {
+<<<<<<< HEAD
                     //System.out.println(m_mean + ",W");
                     m_lastLevel = DDM_WARNING_LEVEL;
                     return DDM_WARNING_LEVEL;
                 } else {
                     //System.out.println(m_mean + ",N");
+=======
+                    System.out.println(m_mean + ",W");
+                    m_lastLevel = DDM_WARNING_LEVEL;
+                    return DDM_WARNING_LEVEL;
+                } else {
+                    System.out.println(m_mean + ",N");
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
                     m_lastLevel = DDM_INCONTROL_LEVEL;
                     return DDM_INCONTROL_LEVEL;
                 }
@@ -150,10 +165,13 @@ public class EDDM extends AbstractOptionHandler implements DriftDetectionMethod 
     public DriftDetectionMethod copy() {
         return (DriftDetectionMethod) super.copy();
     }
+<<<<<<< HEAD
 
 	@Override
 	public int computeNextVal(boolean prediction, Instance inst) {
 		// TODO Auto-generated method stub
 		return this.computeNextVal(prediction);
 	}
+=======
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 }

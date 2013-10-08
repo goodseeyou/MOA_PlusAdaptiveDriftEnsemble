@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *    StreamPanel.java
  *    Copyright (C) 2010 RWTH Aachen University, Germany
@@ -15,6 +16,28 @@
  *
  *    You should have received a copy of the GNU General Public License
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+=======
+/**
+ * StreamPanel.java
+ * 
+ * @author Timm Jansen (moa@cs.rwth-aachen.de)
+ * @editor Yunsu Kim
+ * 
+ * Last edited: 2013/06/02 
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  *    
  */
 
@@ -37,6 +60,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -48,6 +72,29 @@ import moa.cluster.SphereCluster;
 public class StreamPanel extends JPanel implements ComponentListener{
 
     private ClusterPanel highlighted_cluster = null;
+=======
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import moa.cluster.Cluster;
+import moa.cluster.Clustering;
+import moa.cluster.SphereCluster;
+import moa.clusterers.macro.NonConvexCluster;
+
+public class StreamPanel extends JPanel implements ComponentListener{
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private ClusterPanel highlighted_cluster = null;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     private double zoom_factor = 0.2;
     private int zoom = 1;
     private int width_org;
@@ -69,7 +116,16 @@ public class StreamPanel extends JPanel implements ComponentListener{
 
 
     class pointCanvasPanel extends JPanel{
+<<<<<<< HEAD
         BufferedImage image = null;
+=======
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		BufferedImage image = null;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         public void setImage(BufferedImage image){
             setSize(image.getWidth(), image.getWidth());
             this.image = image;
@@ -116,6 +172,7 @@ public class StreamPanel extends JPanel implements ComponentListener{
     }
 
 
+<<<<<<< HEAD
     public void drawMicroClustering(Clustering clustering, Color color){
         drawClustering(layerMicro, clustering, color);
     }
@@ -125,6 +182,17 @@ public class StreamPanel extends JPanel implements ComponentListener{
     }
     public void drawGTClustering(Clustering clustering, Color color){
         drawClustering(layerGroundTruth, clustering, color);
+=======
+    public void drawMicroClustering(Clustering clustering, List<DataPoint> points, Color color){
+        drawClustering(layerMicro, clustering, points, color);
+    }
+    
+    public void drawMacroClustering(Clustering clustering, List<DataPoint> points, Color color){
+        drawClustering(layerMacro, clustering, points, color);
+    }
+    public void drawGTClustering(Clustering clustering, List<DataPoint> points, Color color){
+        drawClustering(layerGroundTruth, clustering, points, color);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     }
 
     public void setMicroLayerVisibility(boolean visibility){
@@ -145,7 +213,11 @@ public class StreamPanel extends JPanel implements ComponentListener{
 
     void drawPointPanels(ArrayList<DataPoint> points, int timestamp, double decay_rate, double decay_threshold) {
         for(int p = 0; p < points.size(); p++){
+<<<<<<< HEAD
             PointPanel pointPanel = new PointPanel(points.get(p),decay_rate,decay_threshold);
+=======
+            PointPanel pointPanel = new PointPanel(points.get(p), this, decay_rate, decay_threshold);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
             layerPoints.add(pointPanel);
             pointPanel.updateLocation();
         }
@@ -171,7 +243,11 @@ public class StreamPanel extends JPanel implements ComponentListener{
         int x = (int) Math.round(point.value(getActiveXDim()) * size);
         int y = (int) Math.round(point.value(getActiveYDim()) * size);
 
+<<<<<<< HEAD
         Color c = PointPanel.getPointColorbyClass((int)point.classValue(), 10);
+=======
+        Color c = PointPanel.getPointColorbyClass(point, 10);
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         imageGraphics.setColor(c);
         int psize = PointPanel.POINTSIZE;
         int poffset = 2;
@@ -182,7 +258,11 @@ public class StreamPanel extends JPanel implements ComponentListener{
     }
 
 
+<<<<<<< HEAD
     private void drawCanvansClustering(JPanel layer, Graphics2D imageGraphics){
+=======
+    private void drawClusteringsOnCanvas(JPanel layer, Graphics2D imageGraphics){
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         for(Component comp :layer.getComponents()){
             if(comp instanceof ClusterPanel){
                 ClusterPanel cp = (ClusterPanel)comp;
@@ -201,6 +281,7 @@ public class StreamPanel extends JPanel implements ComponentListener{
         layerPointCanvas.repaint();
     }
 
+<<<<<<< HEAD
     private void drawClustering(JPanel layer, Clustering clustering, Color color){
         layer.removeAll();
         for (int c = 0; c < clustering.size(); c++) {
@@ -220,6 +301,57 @@ public class StreamPanel extends JPanel implements ComponentListener{
         }
 
         layer.repaint();
+=======
+    private void drawClustering(JPanel layer, Clustering clustering, List<DataPoint> points, Color color){
+        if (clustering.get(0) instanceof NonConvexCluster) {
+        	drawNonConvexClustering(layer, clustering, points, color);
+        } else {	
+	    	layer.removeAll();
+	        for (int c = 0; c < clustering.size(); c++) {
+	            SphereCluster cluster = (SphereCluster)clustering.get(c);
+	
+	            ClusterPanel clusterpanel = new ClusterPanel(cluster, color, this);
+	            
+	            layer.add(clusterpanel);
+	            clusterpanel.updateLocation();
+	        }
+	
+	        if(layer.isVisible() && pointsVisible){
+	            Graphics2D imageGraphics = (Graphics2D) pointCanvas.createGraphics();
+	            imageGraphics.setColor(color);
+	            drawClusteringsOnCanvas(layer, imageGraphics);
+	            layerPointCanvas.repaint();
+	        }
+	
+	        layer.repaint();
+        }
+    }
+    
+    private void drawNonConvexClustering(JPanel layer, Clustering clustering, List<DataPoint> points, Color color) {
+    	layerMacro.removeAll();
+    	
+    	List<Cluster> foundClusters = clustering.getClustering();
+    	double inclusionProbabilityThreshold = 0.5;
+    	for (DataPoint p : points) {
+    		for (int i = 0; i < foundClusters.size(); i++) {
+    			Cluster fc = foundClusters.get(i);
+    			if (fc.getInclusionProbability(p) >= inclusionProbabilityThreshold) {
+    				PointPanel pointPanel = new PointPanel(p, this, color);
+    			    layerMacro.add(pointPanel);
+    			    pointPanel.updateLocation();
+    			}
+    		}
+    	}
+
+        if (layerMacro.isVisible() && pointsVisible) {	// Points & Macro together
+            Graphics2D imageGraphics = (Graphics2D) pointCanvas.createGraphics();
+            imageGraphics.setColor(color);
+            drawClusteringsOnCanvas(layerMacro, imageGraphics);
+            layerPointCanvas.repaint();
+        }
+
+        layerMacro.repaint();
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     }
 
     public void screenshot(String filename, boolean svg, boolean png){

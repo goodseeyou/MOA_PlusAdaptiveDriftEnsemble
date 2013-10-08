@@ -41,6 +41,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import moa.evaluation.Accuracy;
 import moa.evaluation.MeasureCollection;
+<<<<<<< HEAD
+=======
+import moa.evaluation.RegressionAccuracy;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
 /**
  * This panel displays text. Used to output the results of tasks.
@@ -64,7 +68,18 @@ public class TaskTextViewerPanel extends JPanel implements ActionListener {
 
     private javax.swing.JSplitPane jSplitPane1;
 
+<<<<<<< HEAD
     public TaskTextViewerPanel() {
+=======
+    private boolean isRegression;
+
+    public TaskTextViewerPanel() {
+        this(false);
+    }
+    
+    public TaskTextViewerPanel(boolean isRegression) {
+        this.isRegression = isRegression;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         java.awt.GridBagConstraints gridBagConstraints;
 
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -253,9 +268,15 @@ public class TaskTextViewerPanel extends JPanel implements ActionListener {
         gridBagConstraints.weighty = 1.0;
         add(jSplitPane1, gridBagConstraints);
 
+<<<<<<< HEAD
         acc1[0] = new Accuracy();
 
         acc2[0] = new Accuracy();
+=======
+        acc1[0] = newAccuracy();
+
+        acc2[0] = newAccuracy();
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         clusteringVisualEvalPanel1.setMeasures(acc1, acc2, this);
         this.graphCanvas.setGraph(acc1[0], acc2[0], 0, 1000);
 
@@ -285,7 +306,11 @@ public class TaskTextViewerPanel extends JPanel implements ActionListener {
          double processFrequency = 1000;
         if (preview != null && !preview.equals("")) {
             MeasureCollection oldAccuracy = acc1[0];
+<<<<<<< HEAD
             acc1[0] = new Accuracy();
+=======
+            acc1[0] = newAccuracy();
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
             Scanner scanner = new Scanner(preview);
             String firstLine = scanner.nextLine();
             boolean isSecondLine = true;
@@ -340,12 +365,21 @@ public class TaskTextViewerPanel extends JPanel implements ActionListener {
                     }
                 }
             } else {
+<<<<<<< HEAD
                  this.acc2[0] = new Accuracy();
             }
             
         } else {
             this.acc1[0] = new Accuracy();
             this.acc2[0] = new Accuracy();
+=======
+                 this.acc2[0] = newAccuracy();
+            }
+            
+        } else {
+            this.acc1[0] = newAccuracy();
+            this.acc2[0] = newAccuracy();
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
         }
         this.graphCanvas.setGraph(acc1[0], acc2[0], this.graphCanvas.getMeasureSelected(), (int) processFrequency);
         this.graphCanvas.updateCanvas();
@@ -481,4 +515,12 @@ public class TaskTextViewerPanel extends JPanel implements ActionListener {
         }
         this.graphCanvas.setGraph(acc1[m_select], acc2[m_select], m_select_offset, this.graphCanvas.getProcessFrequency());
     }
+<<<<<<< HEAD
+=======
+    
+    protected Accuracy newAccuracy() {
+        return this.isRegression == false ? new Accuracy() : new RegressionAccuracy();
+    }
+    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 }

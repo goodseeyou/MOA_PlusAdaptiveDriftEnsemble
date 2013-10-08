@@ -76,7 +76,11 @@ import weka.core.Utils;
  * <li>Same parameters as <code>OzaBag</code>
  * <li>-f : the size of first classifier in the bag.
  * <li>-u : Enable weight classifiers
+<<<<<<< HEAD
  * <li>-r : Reset trees when size is higher than the max
+=======
+ * <li>-e : Reset trees when size is higher than the max
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  * </ul>
  *
  * @author Albert Bifet (abifet at cs dot waikato dot ac dot nz)
@@ -98,7 +102,11 @@ public class OzaBagASHT extends OzaBag {
             'u', "Enable weight classifiers.");
 
     public FlagOption resetTreesOption = new FlagOption("resetTrees",
+<<<<<<< HEAD
             'r', "Reset trees when size is higher than the max.");
+=======
+            'e', "Reset trees when size is higher than the max.");
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
     protected double[] error;
 

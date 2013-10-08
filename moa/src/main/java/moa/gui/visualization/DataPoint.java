@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *    DataPoint.java
  *    Copyright (C) 2010 RWTH Aachen University, Germany
@@ -15,6 +16,29 @@
  *
  *    You should have received a copy of the GNU General Public License
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+=======
+/**
+ * [DataPoint.java]
+ * 
+ * @author Timm Jansen (moa@cs.rwth-aachen.de)
+ * @editor Yunsu Kim
+ * 
+ * Last edited: 2013/06/02
+ * Data Management and Data Exploration Group, RWTH Aachen University
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *    
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
  *    
  */
 
@@ -23,12 +47,27 @@ package moa.gui.visualization;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
+<<<<<<< HEAD
+=======
+
+import weka.core.Attribute;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 import weka.core.DenseInstance;
 import weka.core.Instance;
 
 public class DataPoint extends DenseInstance{
+<<<<<<< HEAD
     protected int timestamp;
     private HashMap<String, String> measure_values;
+=======
+    
+	private static final long serialVersionUID = 1L;
+	
+	protected int timestamp;
+    private HashMap<String, String> measure_values;
+    
+    protected int noiseLabel;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 
     public DataPoint(Instance nextInstance, Integer timestamp) {
         super(nextInstance);
@@ -36,6 +75,11 @@ public class DataPoint extends DenseInstance{
         this.timestamp = timestamp;
         measure_values = new HashMap<String, String>();
         
+<<<<<<< HEAD
+=======
+        Attribute classLabel = dataset().classAttribute();
+        noiseLabel = classLabel.indexOfValue("noise");		// -1 returned if there is no noise
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
     }
 
     public void updateWeight(int cur_timestamp, double decay_rate){
@@ -113,4 +157,15 @@ public class DataPoint extends DenseInstance{
         return Math.sqrt(distance);
     }
 
+<<<<<<< HEAD
+=======
+    
+    public boolean isNoise() {
+		return (int)classValue() == noiseLabel;
+	}
+    
+    public double getNoiseLabel() {
+    	return noiseLabel;
+    }
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
 }

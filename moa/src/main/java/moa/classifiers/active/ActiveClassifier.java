@@ -194,6 +194,10 @@ public class ActiveClassifier extends AbstractClassifier {
             costNow = 0;
             //Use all instances at the beginning
             this.classifier.trainOnInstance(inst);
+<<<<<<< HEAD
+=======
+	    this.costLabeling++;
+>>>>>>> 11d381b22515b9114312bca4f8718025eae5b72f
             return;
         } else {
             costNow = (this.costLabeling - this.numInstancesInitOption.getValue()) / ((double) this.iterationControl - this.numInstancesInitOption.getValue());
